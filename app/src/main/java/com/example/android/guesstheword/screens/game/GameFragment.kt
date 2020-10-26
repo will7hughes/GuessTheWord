@@ -30,16 +30,20 @@ import com.example.android.guesstheword.databinding.GameFragmentBinding
  */
 class GameFragment : Fragment() {
 
+    // TODO: binding and viewModel
+    private lateinit var binding: GameFragmentBinding
+
+    // TODO: Move to viewModel
     // The current word
     private var word = ""
 
+    // TODO: Move to viewModel
     // The current score
     private var score = 0
 
+    // TODO: Move to viewModel
     // The list of words - the front of the list is the next word to guess
     private lateinit var wordList: MutableList<String>
-
-    private lateinit var binding: GameFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -54,15 +58,19 @@ class GameFragment : Fragment() {
 
         resetList()
         nextWord()
+        // TODO: Get viewModel and set it to this
 
         binding.correctButton.setOnClickListener { onCorrect() }
         binding.skipButton.setOnClickListener { onSkip() }
+        // TODO: binding endGameButton onClickListener
+
         updateScoreText()
         updateWordText()
         return binding.root
 
     }
 
+    // TODO: Move to viewModel
     /**
      * Resets the list of words and randomizes the order
      */
@@ -95,16 +103,24 @@ class GameFragment : Fragment() {
 
     /** Methods for buttons presses **/
 
+    // TODO: Move to viewModel
     private fun onSkip() {
         score--
         nextWord()
     }
 
+    // TODO: Move to viewModel
     private fun onCorrect() {
         score++
         nextWord()
     }
 
+    // TODO: onEndGame
+
+    // TODO: gameFinished toast, action, navigation
+
+
+    // TODO: Move to viewModel
     /**
      * Moves to the next word in the list
      */
