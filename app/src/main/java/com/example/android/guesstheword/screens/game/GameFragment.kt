@@ -17,11 +17,15 @@
 package com.example.android.guesstheword.screens.game
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.GameFragmentBinding
 
@@ -30,20 +34,9 @@ import com.example.android.guesstheword.databinding.GameFragmentBinding
  */
 class GameFragment : Fragment() {
 
-    // TODO: binding and viewModel
     private lateinit var binding: GameFragmentBinding
 
-    // TODO: Move to viewModel
-    // The current word
-    private var word = ""
-
-    // TODO: Move to viewModel
-    // The current score
-    private var score = 0
-
-    // TODO: Move to viewModel
-    // The list of words - the front of the list is the next word to guess
-    private lateinit var wordList: MutableList<String>
+    private lateinit var viewModel: GameViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -55,92 +48,54 @@ class GameFragment : Fragment() {
                 container,
                 false
         )
+        Log.i("GameFragment", "Called ViewModelProvider.get")
 
-        resetList()
-        nextWord()
-        // TODO: Get viewModel and set it to this
+        // Get the viewModel
+        viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
 
         binding.correctButton.setOnClickListener { onCorrect() }
         binding.skipButton.setOnClickListener { onSkip() }
-        // TODO: binding endGameButton onClickListener
-
+        binding.endGameButton.setOnClickListener { onEndGame() }
         updateScoreText()
         updateWordText()
         return binding.root
-
-    }
-
-    // TODO: Move to viewModel
-    /**
-     * Resets the list of words and randomizes the order
-     */
-    private fun resetList() {
-        wordList = mutableListOf(
-                "queen",
-                "hospital",
-                "basketball",
-                "cat",
-                "change",
-                "snail",
-                "soup",
-                "calendar",
-                "sad",
-                "desk",
-                "guitar",
-                "home",
-                "railway",
-                "zebra",
-                "jelly",
-                "car",
-                "crow",
-                "trade",
-                "bag",
-                "roll",
-                "bubble"
-        )
-        wordList.shuffle()
     }
 
     /** Methods for buttons presses **/
 
-    // TODO: Move to viewModel
     private fun onSkip() {
-        score--
-        nextWord()
-    }
-
-    // TODO: Move to viewModel
-    private fun onCorrect() {
-        score++
-        nextWord()
-    }
-
-    // TODO: onEndGame
-
-    // TODO: gameFinished toast, action, navigation
-
-
-    // TODO: Move to viewModel
-    /**
-     * Moves to the next word in the list
-     */
-    private fun nextWord() {
-        if (!wordList.isEmpty()) {
-            //Select and remove a word from the list
-            word = wordList.removeAt(0)
-        }
+        viewModel.onSkip()
         updateWordText()
         updateScoreText()
     }
+    private fun onCorrect() {
+        viewModel.onCorrect()
+        updateScoreText()
+        updateWordText()
+    }
 
+    private fun onEndGame() {
+        gameFinished()
+    }
 
     /** Methods for updating the UI **/
 
     private fun updateWordText() {
-        binding.wordText.text = word
+        binding.wordText.text = viewModel.word
+
     }
 
     private fun updateScoreText() {
-        binding.scoreText.text = score.toString()
+        binding.scoreText.text = viewModel.score.toString()
+    }
+
+    /**
+     * Called when the game is finished
+     */
+    private fun gameFinished() {
+        Toast.makeText(activity, "Game has just finished", Toast.LENGTH_SHORT).show()
+        val action = GameFragmentDirections.actionGameToScore()
+        action.score = viewModel.score
+        NavHostFragment.findNavController(this).navigate(action)
     }
 }
