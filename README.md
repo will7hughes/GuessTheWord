@@ -24,6 +24,9 @@ Getting Started
 
 1. Download and run the app.
 
+## Notable Links
+https://developer.android.com/topic/libraries/architecture/viewmodel?gclid=Cj0KCQiA7qP9BRCLARIsABDaZzjssCH9RTbSunMSdq2YWtrFL0gxHp3G6PDkEqjJ1CHaNTlJZqj34dQaAifyEALw_wcB&gclsrc=aw.ds</br>
+https://codelabs.developers.google.com/codelabs/kotlin-android-training-view-model#0
 License
 -------
 
